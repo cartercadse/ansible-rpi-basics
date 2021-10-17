@@ -1,0 +1,34 @@
+---
+
+- name: "Create user"
+  user:
+    name: carter
+    create_home: true
+    shell: /bin/bash
+    password: "{{ cluster_user_password | password_hash('sha512') }}"
+    groups: sudo
+    append: yes
+
+- name: "Set authorized key for user carter"
+  authorized_key:
+    user: carter
+    state: present
+#    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+
+    key: "{{ ssh_key }}"
+
+- name: "Disable ssh access for user pi"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    insertafter: "EOF"
+    line: "DenyUsers pi"
+
+- name: "Change password user pi"
+  user:
+    name: pi 
+    password: "{{ pi_password | password_hash('sha512')}}"
+
+- name: Restart sshd 
+  service:
+    name: sshd
+    state: restarted

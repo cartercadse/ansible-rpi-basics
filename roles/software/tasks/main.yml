@@ -1,0 +1,35 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install lm-sensors
+  apt:
+    name: lm-sensors
+    state: present
+
+- name: Install git
+  apt:
+    name: git
+    state: present
+
+
+
+
+
+
+- name: Update all packages
+  apt:
+    name: "*"
+    state: latest
+
+- name: Remove unused dependencies
+  apt:
+    autoremove: yes
+
+- name: Clean up unused packages
+  apt:
+    autoclean: yes
+
+- name: Reboot the machine
+  reboot:

@@ -1,0 +1,38 @@
+---
+#- name: "Password carter"
+#  hosts: all
+#  gather_facts: no
+#  vars_prompt:
+#  - name: carter_password
+#    prompt: Please enter the desired password for user carter
+#    private: yes
+#    confirm: yes
+
+#  tasks:
+#  - set_fact:
+#      root_password: "{{ carter_password }}"
+
+
+
+# - name: "User configuration"
+#   hosts: all
+#   become: yes
+#   gather_facts: no
+#   remote_user: pi
+
+#   roles:
+#   - users
+
+
+
+
+- name: "Network configuration"
+  hosts: all
+  become: yes
+  gather_facts: no
+
+  roles:
+  - system
+
+
+

@@ -1,0 +1,11 @@
+- name: Test ps
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: check ps-u carter
+      shell: "ps -u carter"
+      retries: 3
+      delay: 3
+      register: result
+      until: result.rc == 0
