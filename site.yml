@@ -2,4 +2,4 @@
 - hosts: raspi
   become: yes
   roles:
-    - role: common
+    - system
