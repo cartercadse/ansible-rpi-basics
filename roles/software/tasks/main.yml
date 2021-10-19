@@ -19,8 +19,10 @@
     name: python-pip3
     state: present
 
-
-
+- name: Install Python Package rpi_hardware_pwm
+  pip:
+    name: rpi_hardware_pwm
+    executable: pip3
 
 - name: Update all packages
   apt:
