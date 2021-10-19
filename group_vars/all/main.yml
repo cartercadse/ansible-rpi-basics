@@ -1,8 +1,10 @@
 ---
 
-cluster_become_password: "{{ vault_cluster_become_password }}"  
+cluster_user_password: "{{ vault_cluster_become_password }}"  
 ansible_become_password: "{{ vault_cluster_become_password }}"
 ssh_key: "{{ vault_ssh_key }}"
 pi_password: "{{ vault_pi_password }}"
+apt_cache_ip: "10.101.100.11"
+apt_cache_port: "3142"
 
 include_vars: "vault.yml"
