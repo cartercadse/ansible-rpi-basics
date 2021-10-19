@@ -1,4 +1,5 @@
 # Specify filepatterns you want git to ignore.
 .DS_Store
-.vault_pw
+.vault_pass
 *.sublime-*
+hosts.yml
