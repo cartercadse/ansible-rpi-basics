@@ -37,7 +37,11 @@
 
 
 
-
+- name: Enable hardware pwm
+  lineinfile:
+    path: /boot/config.txt
+    insertafter: EOF
+    line: "dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4"
 
 
 - name: Activating cgroup support
