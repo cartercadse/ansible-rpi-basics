@@ -5,8 +5,8 @@ from time import sleep
 # This will enable pwm channel 0 on GPIO 12 and channel 1 on GPIO 13
 # Don't forget to reboot for this to have an effect
 
-mintemp = 30  # less than this and the fan is off
-maxtemp = 60  # more than this and the fan runs full speed
+mintemp = {{ fan_min_temperature }}  # less than this and the fan is off
+maxtemp = {{ fan_max_temperature }}  # more than this and the fan runs full speed
 
 pwm = HardwarePWM(0, hz=25000)  # initialize PWM channel 0 with 25kHz
 pwm.start(0)  # start off
@@ -33,7 +33,7 @@ try:
         # set duty cycle
         pwm.change_duty_cycle(dc)
         # print out temperature and dc for debug reasons
-        print(f"Temperature: {temperature:4.2f}°C - DutyCycle: {dc}%")
+        # print(f"Temperature: {temperature:4.2f}°C - DutyCycle: {dc}%")
         # sleep a second
         sleep(1)
 
