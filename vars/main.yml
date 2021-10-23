@@ -10,8 +10,6 @@ apt_cache_port: "3142"
 fan_min_temperature: 30
 fan_max_temperature: 60
 
-include_vars: "vault.yml"
-
 raspberry_pi_boot_config_options:
   # Set GPU Memory to 16MB
   - regexp: "^#?gpu_mem"
