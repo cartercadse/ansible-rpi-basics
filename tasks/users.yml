@@ -6,7 +6,7 @@
     create_home: true
     shell: /bin/bash
     password: "{{ cluster_user_password | password_hash('sha512') }}"
-    groups: sudo
+    groups: sudo,gpio
     append: yes
 
 - name: "Set authorized key for user carter"

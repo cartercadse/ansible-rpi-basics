@@ -10,3 +10,17 @@ fan_min_temperature: 30
 fan_max_temperature: 60
 
 include_vars: "vault.yml"
+
+raspberry_pi_boot_config_options:
+  # Set GPU Memory to 16MB
+  - regexp: "^#?gpu_mem"
+    line: "gpu_mem=16" 
+  # Disable Wifi module
+  - regexp: "^#?dtoverlay=disable-wifi"
+    line: "dtoverlay=disablewifi"
+  # Disable BT module
+  - regexp: "^#?dtoverlay=disable-bt"
+    line: "dtoverlay=disable-bt"
+  # Enable hardware PWM
+  - regexp: "^#?dtoverlay=pwm-2chan"
+    line: "dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4"
