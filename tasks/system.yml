@@ -1,9 +1,4 @@
 ---
-- name: Set Python 3 as standard 
-  shell: |
-    rm /usr/bin/python
-    ln -s /usr/bin/python3 /usr/bin/python
-
 - name: Set hostname to {{ inventory_hostname }}
   hostname:
     name: "{{ inventory_hostname }}"
