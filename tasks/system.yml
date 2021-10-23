@@ -3,11 +3,17 @@
   hostname:
     name: "{{ inventory_hostname }}"
 
-- name: Update /etc/hosts
+- name: Update /etc/hosts (1/2)
   lineinfile:
     path: /etc/hosts
     regexp: '^127\.0\.0\.1'
     line: "127.0.0.1{{'\t'}}{{ inventory_hostname }}"
+
+- name: Update /etc/hosts (1/2)
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.1\.1'
+    line: "127.0.1.1{{'\t'}}{{ inventory_hostname }}"
 
 - name: Disable HDMI port
   lineinfile:
