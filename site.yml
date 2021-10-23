@@ -1,18 +1,26 @@
 ---
-- hosts: raspi
+- name: "Initial Config as user pi"
+  hosts: raspi
   become: yes
-  
+  remote_user: "pi"
+
+  tasks:
+    - name: Perform basic user configuration.
+      import_tasks: tasks/users.yml
+
+
+- name: "Main Config as user {{ cluster_user }}"
+  hosts: raspi
+  become: yes
+  remote_user: "{{ cluster_user }}"
+
   pre_tasks:
     - name: Update apt cache
       apt:
         update_cache: yes
         cache_valid_time: 3600
 
-
   tasks:
-    - name: Perform basic user configuration.
-      import_tasks: tasks/users.yml
-
     - name: Import system tasks. 
       import_tasks: tasks/system.yml
 
