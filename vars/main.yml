@@ -16,7 +16,7 @@ raspberry_pi_boot_config_options:
     line: "gpu_mem=16" 
   # Disable Wifi module
   - regexp: "^#?dtoverlay=disable-wifi"
-    line: "dtoverlay=disablewifi"
+    line: "dtoverlay=disable-wifi"
   # Disable BT module
   - regexp: "^#?dtoverlay=disable-bt"
     line: "dtoverlay=disable-bt"
