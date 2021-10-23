@@ -1,5 +1,4 @@
 ---
-
 - name: Set Python 3 as standard 
   shell: |
     rm /usr/bin/python
@@ -12,7 +11,7 @@
 - name: Update /etc/hosts
   lineinfile:
     dest: /etc/hosts
-    regexp: "^127\.0\.0\.1"
+    regexp: '^127\.0\.0\.1'
     line: "127.0.0.1{{'\t'}}{{ inventory_hostname }}"
 
 - name: Disable HDMI port
@@ -22,11 +21,6 @@
     regexp: "^/usr/bin/tvservice"
     line: "/usr/bin/tvservice -o"
     insertbefore: "^exit"
-
-- name: Set up apt cache proxy.
-  template:
-    src: templates/30proxy.j2
-    dest: /etc/apt/apt.conf.d/30proxy
 
 - name: Setting up /boot/config.txt
   lineinfile:
@@ -43,6 +37,20 @@
     regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
     line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
     backrefs: true
+
+- name: "Create directory for system scripts of user {{ cluster_user }}"
+  file:
+    path: "/home/{{ cluster_user }}/.scripts/"
+    state: directory
+    owner: "{{ cluster_user }}"
+    group: "{{ cluster_user }}"
+
+- name: "Transfer temperature.py to user {{ cluster_user }}"
+  template:
+    src: templates/temperature.py.j2
+    dest: "/home/{{ cluster_user }}/.scripts/temperature.py"
+    owner: "{{ cluster_user }}"
+
   
 - name: Reboot the machine
   reboot:  
