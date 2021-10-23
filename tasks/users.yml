@@ -9,7 +9,7 @@
     groups: sudo,gpio
     append: yes
 
-- name: "Set authorized key for user carter"
+- name: "Set authorized key for user {{ cluster_user }}"
   authorized_key:
     user: "{{ cluster_user }}"
     state: present
