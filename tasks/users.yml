@@ -2,7 +2,7 @@
 
 - name: "Create user"
   user:
-    name: carter
+    name: "{{ cluster_user }}"
     create_home: true
     shell: /bin/bash
     password: "{{ cluster_user_password | password_hash('sha512') }}"
@@ -11,7 +11,7 @@
 
 - name: "Set authorized key for user carter"
   authorized_key:
-    user: carter
+    user: "{{ cluster_user }}"
     state: present
     key: "{{ ssh_key }}"
 
@@ -19,6 +19,7 @@
   lineinfile:
     path: /etc/ssh/sshd_config
     insertafter: "EOF"
+    regexp: "^DenyUsers"
     line: "DenyUsers pi"
 
 - name: "Change password user pi"
