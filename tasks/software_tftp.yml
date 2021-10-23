@@ -1,0 +1,29 @@
+---
+
+- name: Install tftp
+  apt:
+    name: tftpd-hpa
+
+- name: Configure tftp
+  lineinfile:
+    regexp: '^TFTP_OPTIONS="--secure"' 
+    path:/etc/default/tftpd-hpa 
+    line: "TFTP_OPTIONS=\"--secure --create\""
+
+
+
+- name: Update all packages
+  apt:
+    name: "*"
+    state: latest
+
+- name: Remove unused dependencies
+  apt:
+    autoremove: yes
+
+- name: Clean up unused packages
+  apt:
+    autoclean: yes
+
+- name: Reboot the machine
+  reboot:
