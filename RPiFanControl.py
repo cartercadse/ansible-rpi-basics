@@ -17,8 +17,8 @@ import signal
 import random
 
 CHANNEL = 0    # PWM Channel - 0 or 1
-MINTEMP = 30   # Minimum temperature - fan is off
-MAXTEMP = 60   # Maximum temperature - fan is at 100%
+MINTEMP = 40   # Minimum temperature in °C - fan is off below this value
+MAXTEMP = 60   # Maximum temperature in °C - fan is at 100%
 MINDC = 20     # Minimum Duty Cycle for the fan
 MAXDC = 100    # Maximum Duty Cycle for the fan
 SLEEPTIME = 5  # time in seconds between updates
