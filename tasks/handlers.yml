@@ -1,0 +1,14 @@
+---
+- name: update RPiFanControl
+  service:
+    name: RPiFanControl.service
+    state: restarted 
+    enabled: yes 
+
+- name: Reboot
+  reboot:
+
+- name: Restart sshd 
+  service:
+    name: sshd
+    state: restarted
