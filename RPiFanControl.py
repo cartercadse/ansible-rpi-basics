@@ -19,11 +19,19 @@ import random
 CHANNEL = 0    # PWM Channel - 0 or 1
 MINTEMP = 30   # Minimum temperature - fan is off
 MAXTEMP = 60   # Maximum temperature - fan is at 100%
+MINDC = 20     # Minimum Duty Cycle for the fan
+MAXDC = 100    # Maximum Duty Cycle for the fan
 SLEEPTIME = 5  # time in seconds between updates
 
 
 class PWMFan:
-    def __init__(self, PWMChannel: int = 0, mintemp: int = 30, maxtemp: int = 60) -> None:
+    def __init__(self,
+                 PWMChannel: int = 0,
+                 mintemp: int = 30,
+                 maxtemp: int = 60,
+                 mindc: int = 20,
+                 maxdc: int = 100
+                 ) -> None:
         """
         :param PWMChannel: 0 or 1
         :param mintemp: Temperature less than this and the fan is off
@@ -31,6 +39,8 @@ class PWMFan:
         """
         self.mintemp = mintemp
         self.maxtemp = maxtemp
+        self.mindc = mindc
+        self.maxdc = maxdc
         self.pwm = HardwarePWM(PWMChannel, hz=25000)
         self.pwm.start(0)
         self.running = True
@@ -60,7 +70,8 @@ class PWMFan:
             dc = 100
         else:
             # calculate duty cycle when temp is between min and max
-            dc = int((temperature - self.mintemp) * 100 / (self.maxtemp - self.mintemp))
+            dc = int((temperature - self.mintemp) * (self.maxdc - self.mindc) /
+                     (self.maxtemp - self.mintemp) + self.mindc)
         # set duty cycle
         self.pwm.change_duty_cycle(dc)
         # print out temperature and dc
@@ -68,7 +79,7 @@ class PWMFan:
 
 
 def main():
-    fan = PWMFan(PWMChannel=CHANNEL, mintemp=MINTEMP, maxtemp=MAXTEMP)
+    fan = PWMFan(PWMChannel=CHANNEL, mintemp=MINTEMP, maxtemp=MAXTEMP, mindc=MINDC, maxdc=MAXDC)
     while fan.running:
         fan.updateFan()
         # sleep some time
