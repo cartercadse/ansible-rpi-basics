@@ -36,3 +36,4 @@
         name: "{{ cluster_user }}"
         state: absent
         remove: yes
+        #
