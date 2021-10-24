@@ -3,7 +3,10 @@
 """
 Controls a PWM capable fan connected to a PWM pin on the Raspberry Pi
 
-Written by Qetesh
+Copyright © 2021 Qetesh
+This work is free. You can redistribute it and/or modify it under the
+terms of the Do What The Fuck You Want To Public License, Version 2,
+as published by Sam Hocevar. See the LICENSE file for more details.
 
 To enable hardware pwm, add to /boot/config.txt: dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4
 This will enable pwm channel 0 on GPIO 12 (PIN 32) and channel 1 on GPIO 13 (PIN 33)
@@ -36,6 +39,8 @@ class PWMFan:
         :param PWMChannel: 0 or 1
         :param mintemp: Temperature less than this and the fan is off
         :param maxtemp: Temperature more than this and the fan runs full speed
+        :param mindc: Minimum duty cycle for the fan
+        :param maxdc: Maximum duty cycle for the fan
         """
         self.mintemp = mintemp
         self.maxtemp = maxtemp
