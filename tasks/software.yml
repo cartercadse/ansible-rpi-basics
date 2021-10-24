@@ -24,6 +24,7 @@
   apt:
     name: "*"
     state: latest
+  notify: reboot
 
 - name: Remove unused dependencies
   apt:
@@ -33,5 +34,3 @@
   apt:
     autoclean: yes
 
-- name: Reboot the machine
-  reboot:
