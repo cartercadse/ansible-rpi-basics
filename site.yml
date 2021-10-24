@@ -1,18 +1,31 @@
 ---
-- name: "Initial Config as user pi"
+- name: Initial Config as user pi.
   hosts: raspi
   become: yes
+  gather_facts: no
   remote_user: "pi"
+
+  pre_tasks:
+    - name: Test if remote user pi can connect.
+      local_action: shell ssh -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i {{ private_key_location }} pi@{{ inventory_hostname }} "echo success"
+      register: pi_enabled
+      ignore_errors: yes
+
+  handlers:
+  - name: Include handlers.
+    import_tasks: tasks/handlers.yml
+
 
   tasks:
     - name: Perform basic user configuration.
       import_tasks: tasks/users.yml
+      when: pi_enabled.stdout == "success"
 
   vars_files: 
     - vars/main.yml
     - vars/vault.yml
 
-- name: "Main Config as user {{ cluster_user }}"
+- name: "Main Config as user {{ cluster_user }}."
   hosts: raspi
   become: yes
   remote_user: "{{ cluster_user }}"
@@ -27,10 +40,14 @@
         src: templates/30proxy.j2
         dest: /etc/apt/apt.conf.d/30proxy
 
-    - name: Update apt cache
+    - name: Update apt cache.
       apt:
         update_cache: yes
         cache_valid_time: 3600
+
+  handlers:
+  - name: Include handlers.
+    import_tasks: tasks/handlers.yml
 
   tasks:
     - name: Import system tasks. 
@@ -38,3 +55,6 @@
 
     - name: Install basic software.
       import_tasks: tasks/software.yml
+
+    - name: Setup RPiFanControl.
+      import_tasks: tasks/rpifancontrol.yml
