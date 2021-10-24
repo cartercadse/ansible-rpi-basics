@@ -7,12 +7,14 @@
 - name: Update /boot/config.txt
   lineinfile:
     path: /boot/config.txt
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
+    regexp: "{{ fan_item.regexp }}"
+    line: "{{ fan_item.line }}"
     insertafter: EOF
     state: present
   with_items: "{{ rpifancontrol_boot_config_options }}"
   notify: reboot
+  loop_control:
+    loop_var: fan_item
 
 - name: Transfer RPiFanControl.py to /usr/local/bin/.
   copy:
@@ -26,5 +28,3 @@
     dest: /etc/systemd/system/RPiFanControl.service    
   notify: update RPiFanControl
 
-- name: Flush Handlers
-  meta: flush_handlers
