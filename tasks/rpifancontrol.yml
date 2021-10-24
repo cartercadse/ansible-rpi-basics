@@ -1,13 +1,13 @@
 ---
 - name: Transfer RPiFanControl.py to /usr/local/bin/.
   copy:
-    src: scripts/qetesh-rpifancontrol/RPiFanControl.py
+    src: scripts/q-RPiFanControl/RPiFanControl.py
     dest: /usr/local/bin/RPiFanControl.py
   notify: update RPiFanControl
 
 - name: Transfer RPiFanControl.service to /etc/systemd/system/.
   copy:
-    src: scripts/qetesh-rpifancontrol/RPiFanControl.service
+    src: scripts/q-RPiFanControl/RPiFanControl.service
     dest: /etc/systemd/system/RPiFanControl.service    
   notify: update RPiFanControl
 
