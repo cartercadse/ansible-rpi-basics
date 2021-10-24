@@ -1,0 +1,38 @@
+---
+- name: Reset Pi config to pre playbook. (1/2)
+  hosts: raspi
+  become: yes
+  remote_user: "{{ cluster_user }}"
+
+  vars_files: 
+    - vars/main.yml
+    - vars/vault.yml
+
+  tasks:
+    - name: Remove pi user sshd block.
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^DenyUsers pi'
+        state: absent
+
+    - name: Restart sshd.
+      service:
+        name: sshd
+        state: restarted
+
+
+- name: Reset Pi config to pre playbook. (2/2)
+  hosts: raspi
+  become: yes
+  remote_user: pi
+
+  tasks:
+
+    - name: "Kill all processes of {{ cluster_user }}."
+      command: "killall -u {{ cluster_user }}"
+
+    - name: "Remove user {{ cluster_user }}."
+      user:
+        name: "{{ cluster_user }}"
+        state: absent
+        remove: yes
