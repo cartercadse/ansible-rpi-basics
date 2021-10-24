@@ -1,0 +1,38 @@
+---
+- name: Set hostname to {{ inventory_hostname }}
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Update /etc/hosts (1/2)
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.0\.1'
+    line: "127.0.0.1{{'\t'}}{{ inventory_hostname }}"
+
+- name: Update /etc/hosts (1/2)
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.1\.1'
+    line: "127.0.1.1{{'\t'}}{{ inventory_hostname }}"
+
+- name: Disable HDMI port
+  lineinfile:
+    path: /etc/rc.local
+    state: present
+    regexp: "^/usr/bin/tvservice"
+    line: "/usr/bin/tvservice -o"
+    insertbefore: "^exit"
+
+- name: Setting up /boot/config.txt
+  lineinfile:
+    path: /boot/config.txt
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    insertafter: EOF
+    state: present
+  with_items: "{{ raspberry_pi_tftp_boot_config_options }}"
+  
+
+
+- name: Reboot the machine
+  reboot:  
