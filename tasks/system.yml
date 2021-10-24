@@ -22,6 +22,7 @@
     regexp: "^/usr/bin/tvservice"
     line: "/usr/bin/tvservice -o"
     insertbefore: "^exit"
+  notify: reboot
 
 - name: Setting up /boot/config.txt
   lineinfile:
@@ -31,6 +32,7 @@
     insertafter: EOF
     state: present
   with_items: "{{ raspberry_pi_boot_config_options }}"
+  notify: reboot
     
 - name: Activating cgroup support
   lineinfile:
@@ -38,7 +40,5 @@
     regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
     line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
     backrefs: true
-
+  notify: reboot
  
-- name: Reboot the machine
-  reboot:  
