@@ -1,6 +1,6 @@
 ---
 - name: Initial Config as user pi.
-  hosts: raspi
+  hosts: all
   become: yes
   gather_facts: no
   remote_user: "pi"
@@ -11,22 +11,18 @@
       register: pi_enabled
       ignore_errors: yes
 
-  handlers:
-  - name: Include handlers.
-    import_tasks: tasks/handlers.yml
-
+    - include_role:
+        name: init_user
+      when: pi_enabled.stdout == "success"
 
   tasks:
-    - name: Perform basic user configuration.
-      import_tasks: tasks/users.yml
-      when: pi_enabled.stdout == "success"
 
   vars_files: 
     - vars/main.yml
     - vars/vault.yml
 
-- name: "Main Config as user {{ cluster_user }}."
-  hosts: raspi
+- name: "Basic Config as user {{ cluster_user }}."
+  hosts: all
   become: yes
   remote_user: "{{ cluster_user }}"
 
@@ -34,27 +30,29 @@
     - vars/main.yml
     - vars/vault.yml
 
-  pre_tasks:
-    - name: Set up apt cache proxy.
-      template:
-        src: templates/30proxy.j2
-        dest: /etc/apt/apt.conf.d/30proxy
+  roles:
+    - common
 
-    - name: Update apt cache.
-      apt:
-        update_cache: yes
-        cache_valid_time: 3600
+- name: "Set up RPiFanControl"
+  hosts: raspi
+  become: yes
+  remote_user: "{{ cluster_user }}"
 
-  handlers:
-  - name: Include handlers.
-    import_tasks: tasks/handlers.yml
+  vars_files:
+    - vars/main.yml
+    - vars/vault.yml
 
-  tasks:
-    - name: Import system tasks. 
-      import_tasks: tasks/system.yml
+  roles:
+    - rpifancontrol
 
-    - name: Install basic software.
-      import_tasks: tasks/software.yml
+- name: "Set up TFTP"
+  hosts: tftp
+  become: yes
+  remote_user: "{{ cluster_user }}"
 
-    - name: Setup RPiFanControl.
-      import_tasks: tasks/rpifancontrol.yml
+  vars_files:
+    - vars/main.yml
+    - vars/vault.yml
+
+  roles:
+    - tftp
