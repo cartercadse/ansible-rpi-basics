@@ -1,0 +1,12 @@
+[Unit]
+Description=RPi Fan Control
+
+[Service]
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/env python3 /usr/local/bin/RPiFanControl.py
+Restart=on-failure
+RuntimeDirectory=RPiFanControl
+WorkingDirectory=/run/RPiFanControl
+
+[Install]
+WantedBy=default.target
