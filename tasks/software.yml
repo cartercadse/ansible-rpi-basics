@@ -34,3 +34,5 @@
   apt:
     autoclean: yes
 
+- name: Flush Handlers
+  meta: flush_handlers
