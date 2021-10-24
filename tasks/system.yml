@@ -42,3 +42,5 @@
     backrefs: true
   notify: reboot
  
+- name: Flush Handlers
+  meta: flush_handlers
