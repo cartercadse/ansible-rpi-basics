@@ -1,0 +1,6 @@
+---
+- name: Include tasks
+  include_tasks: "{{ item }}"
+  loop:
+    - system.yml
+    - software.yml
