@@ -21,13 +21,10 @@
     insertafter: "EOF"
     regexp: "^DenyUsers"
     line: "DenyUsers pi"
+  notify: Restart sshd
 
 - name: "Change password user pi"
   user:
     name: pi 
     password: "{{ pi_password | password_hash('sha512')}}"
 
-- name: Restart sshd 
-  service:
-    name: sshd
-    state: restarted
