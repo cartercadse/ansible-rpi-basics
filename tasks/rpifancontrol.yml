@@ -1,4 +1,19 @@
 ---
+- name: Install Python Package rpi_hardware_pwm
+  pip:
+    name: rpi_hardware_pwm
+    executable: pip3
+
+- name: Update /boot/config.txt
+  lineinfile:
+    path: /boot/config.txt
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    insertafter: EOF
+    state: present
+  with_items: "{{ rpifancontrol_boot_config_options }}"
+  notify: reboot
+
 - name: Transfer RPiFanControl.py to /usr/local/bin/.
   copy:
     src: scripts/RPiFanControl/RPiFanControl.py
