@@ -55,6 +55,7 @@ class PWMFan:
         self.tempfile = self.cwd + "/temperature"
         self.dcfile = self.cwd + "/dutycycle"
         self.writeFiles = writeFiles
+        self.lasttemp = 0
         print("CWD:", self.cwd)
         if self.writeFiles:
             print("Temperature File:", self.tempfile)
@@ -84,32 +85,34 @@ class PWMFan:
         except FileNotFoundError:
             print("/sys/class/thermal/thermal_zone0/temp not found, using max value")
             temperature = self.maxtemp
-        if temperature < self.mintemp:
-            # fan is off when temp below mintemp
-            dc = 0
-        elif temperature >= self.maxtemp:
-            # fan is fully on when temp above maxtemp
-            dc = 100
-        else:
-            # calculate duty cycle when temp is between min and max
-            dc = int((temperature - self.mintemp) * (self.maxdc - self.mindc) /
-                     (self.maxtemp - self.mintemp) + self.mindc)
-        # set duty cycle
-        self.pwm.change_duty_cycle(dc)
-        # print out temperature and dc
-        print(f"Temperature: {temperature:4.2f}°C - DutyCycle: {dc}%")
-        if self.writeFiles:
-            # write temperature and dutycycle values to files in run directory
-            try:
-                with open(self.tempfile, "w") as tempfile:
-                    tempfile.write(str(temperature))
-            except FileNotFoundError:
-                print("Can't write temperature file")
-            try:
-                with open(self.dcfile, "w") as dcfile:
-                    dcfile.write(str(dc))
-            except FileNotFoundError:
-                print("Can't write dc file")
+        if temperature != self.lasttemp:
+            self.lasttemp = temperature
+            if temperature < self.mintemp:
+                # fan is off when temp below mintemp
+                dc = 0
+            elif temperature >= self.maxtemp:
+                # fan is fully on when temp above maxtemp
+                dc = 100
+            else:
+                # calculate duty cycle when temp is between min and max
+                dc = int((temperature - self.mintemp) * (self.maxdc - self.mindc) /
+                         (self.maxtemp - self.mintemp) + self.mindc)
+            # set duty cycle
+            self.pwm.change_duty_cycle(dc)
+            # print out temperature and dc
+            print(f"Temperature: {temperature:4.1f}°C - DutyCycle: {dc}%")
+            if self.writeFiles:
+                # write temperature and dutycycle values to files in run directory
+                try:
+                    with open(self.tempfile, "w") as tempfile:
+                        tempfile.write(str(temperature))
+                except FileNotFoundError:
+                    print("Can't write temperature file")
+                try:
+                    with open(self.dcfile, "w") as dcfile:
+                        dcfile.write(str(dc))
+                except FileNotFoundError:
+                    print("Can't write dc file")
 
 
 def main():
