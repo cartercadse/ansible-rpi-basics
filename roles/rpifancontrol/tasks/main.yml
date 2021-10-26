@@ -15,6 +15,7 @@
   notify: reboot
   loop_control:
     loop_var: fan_item
+  when: no_fan is not set 
 
 - name: Transfer RPiFanControl.py to /usr/local/bin/.
   copy:
