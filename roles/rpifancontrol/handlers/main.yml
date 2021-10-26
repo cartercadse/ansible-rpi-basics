@@ -5,5 +5,12 @@
     state: restarted 
     enabled: yes 
 
+- name: update RPiFanControl
+  service:
+    name: RPiFanControl.service
+    state: restarted 
+    daemon_reload: yes
+
+
 - name: Reboot
   reboot:
