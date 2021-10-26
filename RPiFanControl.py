@@ -12,7 +12,7 @@ This will enable pwm channel 0 on GPIO 12 (PIN 32) and channel 1 on GPIO 13 (PIN
 Don't forget to reboot for this to have an effect
 """
 
-from rpi_hardware_pwm import HardwarePWM
+from rpi_hardware_pwm import HardwarePWM, HardwarePWMException
 from time import sleep
 import signal
 import pathlib
@@ -48,8 +48,14 @@ class PWMFan:
         self.maxtemp = maxtemp
         self.mindc = mindc
         self.maxdc = maxdc
-        self.pwm = HardwarePWM(PWMChannel, hz=25000)
-        self.pwm.start(0)
+        try:
+            self.pwm = HardwarePWM(PWMChannel, hz=25000)
+        except HardwarePWMException:
+            self.pwm = None
+            print("Hardware-PWM is not active! "
+                  "Add dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4 to /boot/congig.txt and reboot to enable!")
+        if self.pwm is not None:
+            self.pwm.start(0)
         self.running = True
         self.cwd = str(pathlib.Path.cwd())
         self.tempfile = self.cwd + "/temperature"
@@ -98,7 +104,8 @@ class PWMFan:
                 dc = int((temperature - self.mintemp) * (self.maxdc - self.mindc) /
                          (self.maxtemp - self.mintemp) + self.mindc)
             # set duty cycle
-            self.pwm.change_duty_cycle(dc)
+            if self.pwm is not None:
+                self.pwm.change_duty_cycle(dc)
             # print out temperature and dc
             print(f"Temperature: {temperature:4.1f}°C - DutyCycle: {dc}%")
             if self.writeFiles:
