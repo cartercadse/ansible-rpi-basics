@@ -34,7 +34,7 @@
     - common
 
 - name: "Set up RPiFanControl"
-  hosts: raspi
+  hosts: all
   become: yes
   remote_user: "{{ cluster_user }}"
 
