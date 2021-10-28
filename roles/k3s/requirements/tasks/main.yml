@@ -1,0 +1,17 @@
+---
+- name: Flush iptables.
+  iptables:
+    flush: yes
+  changed_when: false # iptables always returns changed, would destroy imdepotence
+
+- name: Activate iptables.
+  community.general.alternatives:
+    path: /usr/sbin/iptables-legacy
+    name: iptables
+
+- name: Activate iptablesv6.
+  community.general.alternatives:
+    path: /usr/sbin/ip6tables-legacy
+    name: ip6tables
+
+    
