@@ -15,44 +15,30 @@
         name: init_user
       when: pi_enabled.stdout == "success"
 
-  tasks:
-
-  vars_files: 
-    - vars/main.yml
-    - vars/vault.yml
-
 - name: "Basic Config as user {{ cluster_user }}."
   hosts: all
   become: yes
-  remote_user: "{{ cluster_user }}"
-
-  vars_files: 
-    - vars/main.yml
-    - vars/vault.yml
 
   roles:
     - common
 
-- name: "Set up RPiFanControl"
+- name: "Set up RPiFanControl."
   hosts: all
   become: yes
-  remote_user: "{{ cluster_user }}"
-
-  vars_files:
-    - vars/main.yml
-    - vars/vault.yml
 
   roles:
     - rpifancontrol
 
-- name: "Set up TFTP"
+- name: "Set up TFTP."
   hosts: tftp
   become: yes
-  remote_user: "{{ cluster_user }}"
-
-  vars_files:
-    - vars/main.yml
-    - vars/vault.yml
 
   roles:
     - tftp
+
+- name: "k3s prerequesites."
+  hosts: k3s
+  become: yes
+
+  roles:
+    - k3s/requirements
