@@ -28,5 +28,5 @@
     src: scripts/RPiFanControl/RPiFanControl.service
     dest: /etc/systemd/system/RPiFanControl.service    
   notify: 
-    - update RPiFanControl service
+    - update RPiFanControl
 
