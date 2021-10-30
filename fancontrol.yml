@@ -1,0 +1,7 @@
+---
+- name: "Set up RPiFanControl."
+  hosts: tftp
+  become: yes
+
+  roles:
+    - rpifancontrol
