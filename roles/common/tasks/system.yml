@@ -24,6 +24,15 @@
     insertbefore: "^exit"
   notify: reboot
 
+- name: Configure locales 
+  blockinfile:
+    path: /etc/default/locale
+    regexp: "^LANG=en_US.UTF-8"
+    block: |
+      LANGUAGE=en_GB.UTF-8
+      LC_ALL=en_US.UTF-8
+  notify: reboot
+
 - name: Setting up /boot/config.txt
   lineinfile:
     path: /boot/config.txt
