@@ -1,21 +1,25 @@
 ---
-- name: Set hostname to {{ inventory_hostname }}
+- name: Set hostname to {{ inventory_hostname }}.
   hostname:
     name: "{{ inventory_hostname }}"
 
-- name: Update /etc/hosts (1/2)
+- name: Update /etc/hosts (1/2).
   lineinfile:
     path: /etc/hosts
     regexp: '^127\.0\.0\.1'
     line: "127.0.0.1{{'\t'}}{{ inventory_hostname }}"
 
-- name: Update /etc/hosts (2/2)
+- name: Update /etc/hosts (2/2).
   lineinfile:
     path: /etc/hosts
     regexp: '^127\.0\.1\.1'
     line: "127.0.1.1{{'\t'}}{{ inventory_hostname }}"
 
-- name: Disable HDMI port
+- name: "Set timezone to {{ pi_timezone }}."
+  timezone:
+    name: "{{ pi_timezone }}"
+
+- name: Disable HDMI port.
   lineinfile:
     path: /etc/rc.local
     state: present
@@ -24,7 +28,7 @@
     insertbefore: "^exit"
   notify: reboot
 
-- name: Configure locales 
+- name: Configure locales.
   blockinfile:
     path: /etc/default/locale
     insertafter: "^LANG=en_US.UTF-8"
@@ -33,7 +37,7 @@
       LC_ALL=en_GB.UTF-8
   notify: reboot
 
-- name: Setting up /boot/config.txt
+- name: Setting up /boot/config.txt.
   lineinfile:
     path: /boot/config.txt
     regexp: "{{ boot_config_item.regexp }}"
@@ -45,7 +49,7 @@
     loop_var: boot_config_item
   notify: reboot
     
-- name: Activating cgroup support
+- name: Activating cgroup support.
   lineinfile:
     path: /boot/cmdline.txt
     regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
@@ -53,5 +57,5 @@
     backrefs: true
   notify: reboot
  
-- name: Flush Handlers
+- name: Flush Handlers.
   meta: flush_handlers
