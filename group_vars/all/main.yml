@@ -10,6 +10,7 @@ apt_cache_ip: "10.101.100.11"
 apt_cache_port: "3142"
 fan_min_temperature: 30
 fan_max_temperature: 60
+pi_timezone: "Europe/Berlin"
 
 raspberry_pi_boot_config_options:
   # Set GPU Memory to 16MB
