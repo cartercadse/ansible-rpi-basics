@@ -2,3 +2,4 @@
 .DS_Store
 .vault_pass
 *.sublime-*
+hosts.yml
