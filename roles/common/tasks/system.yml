@@ -48,14 +48,6 @@
   loop_control:
     loop_var: boot_config_item
   notify: reboot
-    
-- name: Activating cgroup support.
-  lineinfile:
-    path: /boot/cmdline.txt
-    regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
-    line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
-    backrefs: true
-  notify: reboot
  
 - name: Flush Handlers.
   meta: flush_handlers
