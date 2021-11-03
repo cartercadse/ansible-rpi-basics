@@ -15,7 +15,7 @@
         name: init_user
       when: pi_enabled.stdout == "success"
 
-- name: "Basic Config as user {{ cluster_user }}."
+- name: "Basic Config."
   hosts: all
   become: yes
 
