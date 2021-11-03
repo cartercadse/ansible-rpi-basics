@@ -1,6 +1,5 @@
 ---
-- name: restart dhcp
-  service: 
-    name: dnsmasq
-    status: restarted
-    enabled: yes
+- name: restart tftpd
+  service:
+    name: tftpd-hpa.service
+    state: restarted
