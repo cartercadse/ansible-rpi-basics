@@ -1,0 +1,6 @@
+---
+raspios_image_url: "https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2021-05-28/2021-05-07-raspios-buster-armhf-lite.zip"
+raspios_image: "2021-05-07-raspios-buster-armhf-lite.img"
+raspios_image_path: "/home/{{ cluster_user }}/raspios_image/"
+
+dhcp_range: "10.20.30.255"

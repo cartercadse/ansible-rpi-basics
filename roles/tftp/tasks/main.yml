@@ -1,11 +1,32 @@
 ---
-- name: Install tftp
+- name: Install netboot requirements.
   apt:
-    name: tftpd-hpa
+    name:
+    - nfs-kernel-server
+    - dnsmasq
+    - kpartx
+    - unzip
 
-- name: Configure tftp
-  lineinfile:
-    regexp: '^TFTP_OPTIONS="--secure"' 
-    path: /etc/default/tftpd-hpa 
-    line: 'TFTP_OPTIONS="--secure --create"'
-  notify: restart tftpd
+- name: Create raspios image folder.
+  file:
+    path: "{{ raspios_image_path }}"
+    state: directory
+
+- name: Download and unzip raspios image.
+  unarchive:
+    src: "{{ raspios_image_url }}"
+    dest: "{{ raspios_image_path }}""
+    remote_src: yes
+
+- name: Transfer TFTP scripts.
+  copy:
+    src: scripts
+    dest: "/home/{{ cluster_user }}/scripts/"
+    mode: 744
+
+- name: Create dhcp config.
+  template:
+    src: templates/dhcp.j2
+    dest: /etc/dnsmasq.d/00tftp.conf
+  notify: restart dhcp
+
