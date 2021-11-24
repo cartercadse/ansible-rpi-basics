@@ -30,3 +30,39 @@
     dest: /etc/dnsmasq.d/00tftp.conf
   notify: restart dhcp
 
+- name: Create raspios boot folder.
+  file:
+    path: "{{ raspios_boot }}"
+    state: directory
+
+- name: Create raspios root folder.
+  flie:
+    path: "{{ raspios_root }}"
+    state: directory
+
+- name: "Check if image has been extracted already."
+  stat:
+    path: "{{ raspios_boot}}config.txt"
+  register: image_state
+
+- name: "Mount {{ raspios_image }} and extract boot and root folder."
+  shell: |
+    kpartx -a -v {{ raspios_image_path }}{{ raspios_image }}
+    mount /dev/mapper/loop0p1 /mnt
+    cp -a /mnt/* {{ raspios_boot }}
+    echo "Copied boot files"
+    umount /mnt 
+    mount /dev/mapper/loop0p2 /mnt 
+    cp -a /mnt/* {{ raspios_root }}
+    echo "Copied root files"
+    umount /mnt
+    kpartx -d -v {{ raspios_image_path }}{{ raspios_image }}
+  when:
+    not image_state.stat.exists 
+
+- name: Create nfs folder.
+  file:
+    path: "/srv/nfs"
+    state: directory
+
+    
