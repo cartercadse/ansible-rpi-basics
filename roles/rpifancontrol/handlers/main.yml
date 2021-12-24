@@ -7,5 +7,5 @@
     daemon_reload: yes
 
 
-- name: Reboot
+- name: reboot
   reboot:
